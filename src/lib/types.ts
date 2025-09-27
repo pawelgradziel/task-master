@@ -7,4 +7,5 @@ export type Task = {
   completed: boolean;
   createdAt: Timestamp;
   dueDate: string | null;
+  userId: string;
 };

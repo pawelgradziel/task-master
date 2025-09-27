@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Tasks collection rules
+    match /tasks/{taskId} {
+      // Allow read access to authenticated users for their own tasks
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      
+      // Allow create access to authenticated users
+      allow create: if request.auth != null 
+        && request.auth.uid == request.resource.data.userId
+        && request.resource.data.keys().hasAll(['title', 'description', 'completed', 'createdAt', 'userId', 'dueDate'])
+        && request.resource.data.title is string
+        && request.resource.data.description is string
+        && request.resource.data.completed is bool
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.userId is string
+        && (request.resource.data.dueDate == null || request.resource.data.dueDate is string);
+      
+      // Allow update access to authenticated users for their own tasks
+      allow update: if request.auth != null 
+        && request.auth.uid == resource.data.userId
+        && request.auth.uid == request.resource.data.userId;
+      
+      // Allow delete access to authenticated users for their own tasks
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+  }
+}

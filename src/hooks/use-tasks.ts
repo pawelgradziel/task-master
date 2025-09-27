@@ -1,16 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { useAuth } from '@/contexts/auth-context';
 import type { Task } from '@/lib/types';
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
-    const q = query(collection(db, 'tasks'), orderBy('createdAt', 'desc'));
+    if (!user) {
+      setTasks([]);
+      setLoading(false);
+      return;
+    }
+
+   const q = query(
+      collection(db, 'tasks'),
+      where('userId', '==', user.uid),
+      orderBy('createdAt', 'desc')
+    );
 
     const unsubscribe = onSnapshot(
       q,
@@ -29,7 +41,7 @@ export function useTasks() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   return { tasks, loading };
 }
