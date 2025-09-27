@@ -61,7 +61,7 @@ export async function addTask(formData: FormData) {
   }
 
   try {
-    await addDoc(collection(db, 'tasks'), {
+    await addDoc(collection(db, 'users', user.uid, 'tasks'), {
       ...validatedFields.data,
       completed: false,
       createdAt: serverTimestamp(),
@@ -70,6 +70,7 @@ export async function addTask(formData: FormData) {
     revalidatePath('/');
     return { success: true };
   } catch (error) {
+    console.error('Failed to create task.', error);
     return { error: 'Failed to create task.' };
   }
 }
@@ -96,7 +97,7 @@ export async function updateTask(id: string, formData: FormData) {
   }
 
   try {
-    const taskRef = doc(db, 'tasks', id);
+    const taskRef = doc(db, 'users', user.uid, 'tasks', id);
     const taskDoc = await getDoc(taskRef);
     
     if (!taskDoc.exists()) {
@@ -124,7 +125,7 @@ export async function deleteTask(id: string) {
   }
 
   try {
-    const taskRef = doc(db, 'tasks', id);
+    const taskRef = doc(db, 'users', user.uid, 'tasks', id);
     const taskDoc = await getDoc(taskRef);
     
     if (!taskDoc.exists()) {
@@ -153,7 +154,7 @@ export async function toggleTaskCompletion(id: string, completed: boolean) {
   }
 
   try {
-    const taskRef = doc(db, 'tasks', id);
+    const taskRef = doc(db, 'users', user.uid, 'tasks', id);
     const taskDoc = await getDoc(taskRef);
     
     if (!taskDoc.exists()) {

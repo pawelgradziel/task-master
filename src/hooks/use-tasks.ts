@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
+import { collection, collectionGroup, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/auth-context';
 import type { Task } from '@/lib/types';
@@ -19,7 +19,7 @@ export function useTasks() {
     }
 
    const q = query(
-      collection(db, 'tasks'),
+      collectionGroup(db, 'tasks'),
       where('userId', '==', user.uid),
       orderBy('createdAt', 'desc')
     );
