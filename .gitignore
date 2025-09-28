@@ -5,6 +5,8 @@ private
 
 # dependencies
 /node_modules
+/functions/node_modules
+/functions/lib
 /.pnp
 .pnp.*
 .yarn/*

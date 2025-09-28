@@ -11,10 +11,11 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { z } from 'zod';
-import { db } from './firebase';
-import { auth } from './firebase-admin';
+import { db } from '@/lib/firebase';
+import { auth } from '@/lib/firebase-admin';
 import { suggestDate } from '@/ai/flows/smart-date-suggestion';
 import { cookies } from 'next/headers';
+import { callGetTasks } from '@/lib//functions';
 
 const taskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -97,6 +98,9 @@ export async function updateTask(id: string, formData: FormData) {
   }
 
   try {
+    const a = await callGetTasks()
+    console.log('a', a)
+
     const taskRef = doc(db, 'users', user.uid, 'tasks', id);
     const taskDoc = await getDoc(taskRef);
     
@@ -113,6 +117,7 @@ export async function updateTask(id: string, formData: FormData) {
     revalidatePath('/');
     return { success: true };
   } catch (error) {
+    console.error('update error', error)
     return { error: 'Failed to update task.' };
   }
 }
