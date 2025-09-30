@@ -91,3 +91,30 @@ We could also read from collection group from frontend, and that requires new Fi
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 ```
+
+new folder `functions` for cloud function only code
+
+uses private key for `firebase-admin` package's app (see Setup / private/service-account.json section above)
+
+Functions has full access to database, no firestore rules apply here, because it is backend app and it uses `firebase-admin` package for app
+
+how local cloud function are used
+
+```bash
+cd functions
+yarn
+```
+
+run emulator
+
+```bash
+cd <main>
+yarn functions:serve
+```
+
+deploy function to the cloud
+
+```bash
+cd <main>
+yarn functions:deploy
+```
