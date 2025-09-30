@@ -19,6 +19,8 @@ private
 # next.js
 /.next/
 /out/
+/functions/lib/
+/functions/node_modules/
 
 # production
 /build
