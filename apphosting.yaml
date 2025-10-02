@@ -5,3 +5,15 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+
+# Environment variables for Firebase App Hosting
+# Firebase automatically provides FIREBASE_CONFIG and other environment variables
+# No need to manually set Firebase credentials - App Hosting uses Application Default Credentials
+env:
+  # Add any custom environment variables your app needs here
+  # Example:
+  # - variable: NODE_ENV
+  #   value: production
+  #   availability:
+  #     - BUILD
+  #     - RUNTIME
