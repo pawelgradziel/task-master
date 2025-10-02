@@ -21,7 +21,8 @@ if (!admin.apps.length) {
 
     try {
       if (fs.existsSync(serviceAccountPath)) {
-        serviceAccountConfig = require('../../private/service-account.json');
+        const serviceAccountJson = fs.readFileSync(serviceAccountPath, 'utf8');
+        serviceAccountConfig = JSON.parse(serviceAccountJson);
         console.log('🔑 Initializing Firebase Admin with service account credentials (local development)');
         admin.initializeApp({
           credential: admin.credential.cert(serviceAccountConfig)
